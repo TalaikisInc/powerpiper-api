@@ -1,0 +1,14 @@
+{
+    /* NOTE, use Gruntfile instead!!! This file meant only to treat VS warnings */
+    "version": "2.0.2",
+    "compilerOptions": {
+        "target": "es6",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true
+    },
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
+}
