@@ -1,24 +1,18 @@
-import { JsonController, Get, Post } from 'routing-controllers'
-import { getConnectionManager, Repository } from 'typeorm'
-import { EntityFromParam, EntityFromBody } from 'typeorm-routing-controllers-extensions'
+import { Request, Response } from 'express'
+import { getManager } from 'typeorm'
 import { User } from '../entity/user'
 
-@JsonController()
-export class UserController {
+export async function GetUserController(request: Request, response: Response) {
 
-    private userRepository: Repository<User>
+    const userRepository = await getManager().getRepository(User)
 
-    constructor() {
-        this.userRepository = getConnectionManager().get().getRepository(User)
+    const user = await userRepository.findOneById(request.params.id)
+
+    if (!user) {
+        response.status(404)
+        response.end()
+        return
     }
 
-    @Get('/users/:id')
-    public get(@EntityFromParam('id') user: User) {
-        return user
-    }
-
-    @Post('/users')
-    public save(@EntityFromBody() user: User) {
-        return this.userRepository.save(user)
-    }
+    response.send(user)
 }

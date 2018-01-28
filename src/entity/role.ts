@@ -2,15 +2,14 @@ import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
 
 @Entity()
-@Index('idx_rank', ['title'])
-export class Rank {
+export class Role {
 
     @PrimaryGeneratedColumn()
     public id: number
 
-    @Index()
+    @Index({ unique: true })
     @IsNotEmpty()
-    @Column({ unique: true })
+    @Column()
     public title: string
 
 }

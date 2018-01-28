@@ -1,26 +1,35 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Index } from 'typeorm'
+import * as bcrypt from 'bcrypt'
+import * as uuid from 'uuid/v4'
+import { Column,
+    Entity,
+    PrimaryGeneratedColumn,
+    ManyToMany,
+    OneToOne,
+    JoinColumn,
+    Index,
+    JoinTable,
+    CreateDateColumn,
+    UpdateDateColumn,
+    BeforeInsert } from 'typeorm'
 import { IsNotEmpty, IsInt, IsAlpha, IsEmail, IsBoolean, IsDate, IsPositive, Matches } from 'class-validator'
-import { Rank } from './rank'
+import { Role } from './role'
 import { Country } from './country'
 
 @Entity()
-@Index('idx_email', ['email'])
 export class User {
     @PrimaryGeneratedColumn()
     public id: number
 
-    @Index()
-    @Column({ unique: true })
+    @Index({ unique: true })
+    @Column()
     @IsEmail()
     @IsNotEmpty()
     public email: string
 
-    @Column()
-    @IsDate()
+    @CreateDateColumn()
     public createdAt: Date
 
-    @Column()
-    @IsDate()
+    @UpdateDateColumn()
     public updatedAt: Date
 
     @Column()
@@ -31,21 +40,25 @@ export class User {
     @IsAlpha()
     public lastName: string
 
-    @Column()
+    @Column({ type: 'date', nullable: true })
+    @IsDate()
+    public birthDate: Date
+
+    @Column({ nullable: true })
     @IsAlpha()
     public street: string
 
-    @Column()
+    @Column({ nullable: true })
     @IsInt()
     @IsPositive()
     public homeNo: number
 
-    @Column()
+    @Column({ nullable: true })
     @IsInt()
     @IsPositive()
     public aptNo: number
 
-    @Column()
+    @Column({ nullable: true })
     @IsAlpha()
     public state: string
 
@@ -53,43 +66,60 @@ export class User {
     @JoinColumn()
     public country: Country
 
-    @OneToOne((type) => Rank)
-    @JoinColumn()
-    public rank: Rank
+    @ManyToMany((type) => Role, {
+        cascadeInsert: true
+    })
+    @JoinTable()
+    public roles: Role[]
 
-    @Column()
-    private ethAddress: string
+    @Column({ type: 'bool', default: false })
+    @IsBoolean()
+    public isAdmin: boolean
+
+    @Column({ type: 'bool', default: false })
+    @IsBoolean()
+    public isStaff: boolean
+
+    @Column({ nullable: true })
+    public ethAddress: string
 
     @Column()
     @IsNotEmpty()
-    private password: string
+    public password: string
 
     @Column()
     @IsNotEmpty()
-    private emailAccessToken: string
+    public emailAccessToken: string
 
     @Column()
     @IsNotEmpty()
-    private salt: string
+    public salt: string
 
-    @Column({ default: false })
+    @Column({ type: 'bool', default: false })
     @IsBoolean()
-    private emailVerified: boolean
+    public emailVerified: boolean
 
-    @Column({ default: false })
+    @Column({ type: 'bool', default: false })
     @IsBoolean()
-    private linkedWithFacebook: boolean
+    public linkedWithFacebook: boolean
 
-    @Column({ default: false })
+    @Column({ type: 'bool', default: false })
     @IsBoolean()
-    private linkedWithTwitter: boolean
+    public linkedWithTwitter: boolean
 
-    @Column({ default: false })
+    @Column({ type: 'bool', default: false })
     @IsBoolean()
-    private linkedWithGoogle: boolean
+    public linkedWithGoogle: boolean
 
-    @Column({ default: false })
+    @Column({ type: 'bool', default: false })
     @IsBoolean()
-    private linkedWithLinkedin: boolean
+    public linkedWithLinkedin: boolean
+
+    @BeforeInsert()
+    private hash() {
+        this.emailAccessToken = uuid()
+        this.salt = bcrypt.genSaltSync(10)
+        this.password = bcrypt.hashSync(password, this.salt)
+    }
 
 }

@@ -2,11 +2,19 @@
     /* NOTE, use Gruntfile instead!!! This file meant only to treat VS warnings */
     "version": "2.0.2",
     "compilerOptions": {
+        "module": "commonjs",
         "target": "es6",
-        "emitDecoratorMetadata": true,
+        "sourceMap": false,
+        "rootDir": "src",
+        "strict": true,
         "experimentalDecorators": true,
-        "sourceMap": true
+        "emitDecoratorMetadata": true,
+        "strictNullChecks": false
     },
+    "include": [
+        "src/**/*.ts",
+        "src/*.ts"
+    ],
     "exclude": [
         "dist",
         "node_modules"

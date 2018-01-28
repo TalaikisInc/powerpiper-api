@@ -1,8 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm'
-import { IsDate } from 'class-validator'
+import { Entity, PrimaryGeneratedColumn, Column, Index, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity()
-@Index('idx_category', ['slug'])
+@Entity({ orderBy: { title: 'ASC' }})
 export class Category {
 
     @PrimaryGeneratedColumn()
@@ -11,8 +9,8 @@ export class Category {
     @Column()
     public title: string
 
-    @Index()
-    @Column({ unique: true })
+    @Column()
+    @Index({ unique: true })
     public slug: string
 
     @Column('text')
@@ -21,12 +19,10 @@ export class Category {
     @Column({ unique: true })
     public image: string
 
-    @Column()
-    @IsDate()
+    @CreateDateColumn()
     public createdAt: Date
 
-    @Column()
-    @IsDate()
+    @UpdateDateColumn()
     public updatedAt: Date
 
 }

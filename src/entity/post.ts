@@ -1,37 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, Index, JoinTable, JoinColumn, OneToOne } from 'typeorm'
-import { Category } from './category'
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm'
+import { IsNotEmpty } from 'class-validator'
+import { Content } from './abstract/content'
 import { User } from './user'
-import { IsNotEmpty, IsDate } from 'class-validator'
+import { Category } from './category'
 
 @Entity()
-@Index('idx_post', ['slug'])
-export class Post {
+export class Post extends Content {
 
-    @PrimaryGeneratedColumn()
-    public id: number
-
+    @Column({ unique: true })
     @IsNotEmpty()
-    @Column()
-    public title: string
-
-    @Index()
-    @Column({ unique: true })
-    public slug: string
-
-    @Column({ unique: true })
     public image: string
-
-    @Column()
-    @IsDate()
-    public createdAt: Date
-
-    @Column()
-    @IsDate()
-    public updatedAt: Date
-
-    @IsNotEmpty()
-    @Column('text')
-    public content: string
 
     @ManyToMany((type) => Category, {
         cascadeInsert: true
@@ -39,8 +17,10 @@ export class Post {
     @JoinTable()
     public categories: Category[]
 
-    @OneToOne((type) => User)
-    @JoinColumn()
-    public author: User
+    @ManyToMany((type) => User, {
+        cascadeInsert: true
+    })
+    @JoinTable()
+    public author: User[]
 
 }

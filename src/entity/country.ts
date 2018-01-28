@@ -1,15 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
 
-@Entity()
-@Index('idx_country', ['title'])
+@Entity({ orderBy: { createdAt: 'ASC' }})
 export class Country {
 
     @PrimaryGeneratedColumn()
     public id: number
 
-    @Index()
-    @Column({ unique: true })
+    @Index({ unique: true })
+    @Column()
     @IsNotEmpty()
     public title: string
 
