@@ -1,6 +1,6 @@
 const _ENV_ = {
   SYNC_DB: true,
-  LOG_DB: false,
+  LOG_DB: true,
   SESSION_SECRET: 'test44545',
   BASE_URL: 'http://127.0.0.1:3010',
   DATABASE_HOST: '127.0.0.1',

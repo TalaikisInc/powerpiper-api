@@ -2,10 +2,12 @@ import 'reflect-metadata'
 import * as express from 'express'
 import * as cors from 'cors'
 import * as lusca from 'lusca'
+import * as logger from 'morgan'
 import * as bodyParser from 'body-parser'
 import { createConnection, useContainer } from 'typeorm'
 import { Container } from 'typedi'
 import chalk from 'chalk'
+
 import { User } from './entity/user'
 import { Post } from './entity/post'
 import { Category } from './entity/category'
@@ -13,8 +15,11 @@ import { Role } from './entity/role'
 import { Country } from './entity/country'
 import { Page } from './entity/page'
 import { Request, Response } from 'express'
-import { routes } from './routes'
+// import { routes } from './router'
 import _ENV_ from './config'
+import UserRouter from './router/user'
+import BlogRouter from './router/blog'
+import SeedRouter from './router/seed'
 
 useContainer(Container)
 
@@ -45,7 +50,16 @@ createConnection({
     console.log(chalk.green('Connected to Postgres.'))
 
     const server = express()
+
+    server.use(logger('dev'))
+
     server.use(cors({ origin: true, credentials: true }))
+
+    server.use((req, res, next) => {
+      res.header('Content-Type', 'application/vnd.api+json')
+      next()
+    })
+
     server.use(lusca({
       csrf: true,
       csp: {
@@ -59,15 +73,17 @@ createConnection({
       nosniff: true,
       referrerPolicy: 'same-origin'
     }))
+
     server.use(bodyParser.json())
 
-    routes.forEach((route) => {
-      (server as any)[route.method](route.path, (request: Request, response: Response, next: any) => {
-        route.action(request, response)
-          .then(() => next)
-          .catch((err: any) => next(chalk.red(err)))
-      })
-    })
+    server.use(bodyParser.urlencoded({ extended: false }))
+
+    const router = express.Router()
+
+    server.use('/', router)
+    server.use('/api/users', UserRouter)
+    server.use('/api/blog', BlogRouter)
+    server.use('/api/seed', SeedRouter)
 
     server.listen(_ENV_.API_PORT)
 

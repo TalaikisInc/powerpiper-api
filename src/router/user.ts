@@ -4,6 +4,7 @@ import { getManager } from 'typeorm'
 import * as jwt from 'jwt-simple'
 import * as bcrypt from 'bcrypt'
 const validator = new Validator()
+
 import _ENV_ from '../config'
 import { User } from '../entity/user'
 import { GetUserByEmail } from '../controller/user/GetUserByEmail'
@@ -12,6 +13,8 @@ import { SaveUser } from '../controller/user/SaveUser'
 // @ TODO
 // import { UpdateUser } from '../controller/user/UpdateUser'
 // import { DeleteUser } from '../controller/user/DeleteUser'
+// email: 1. send confirmation email 2. confirm emaqil route
+// password reset: 1. send email 2. reset email route
 
 export class UserRouter {
 
@@ -20,7 +23,7 @@ export class UserRouter {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
-      lastName: user.lasName,
+      lastName: user.lastName,
       birthDate: user.birthDate,
       street: user.street,
       state: user.state,
@@ -88,7 +91,6 @@ export class UserRouter {
       })
     } else {
       SaveUser(email, password)
-
       .then((user: User) => {
         res.status(201).send({
           data: {
@@ -158,7 +160,7 @@ export class UserRouter {
       })
     } else {
       GetUserByEmail(email)
-      .then((users: User[]) => {
+      .then((users: any) => {
         if (users.length > 0) {
           const user = users[0]
           bcrypt.compare(password, user.password, (err, isMatch) => {

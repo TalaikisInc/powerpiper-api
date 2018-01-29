@@ -1,5 +1,7 @@
-import { Entity, Index, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, Index, PrimaryGeneratedColumn, Column,
+    CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
+import slugify from '../../utils/slugify'
 
 @Entity({ orderBy: { createdAt: 'DESC' }})
 export abstract class Content {
@@ -24,5 +26,10 @@ export abstract class Content {
 
     @UpdateDateColumn()
     public updatedAt: Date
+
+    @BeforeInsert()
+    private slugMaker() {
+        this.slug = slugify(this.title)
+    }
 
 }

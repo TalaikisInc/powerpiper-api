@@ -12,8 +12,11 @@ import { Column,
     UpdateDateColumn,
     BeforeInsert } from 'typeorm'
 import { IsNotEmpty, IsInt, IsAlpha, IsEmail, IsBoolean, IsDate, IsPositive, Matches } from 'class-validator'
+
 import { Role } from './role'
 import { Country } from './country'
+import _ENV_ from '../config'
+import sendVerificationEmail from '../utils/email'
 
 @Entity()
 export class User {
@@ -63,13 +66,23 @@ export class User {
     public state: string
 
     @OneToOne((type) => Country)
-    @JoinColumn()
+    @JoinColumn({ name: 'country_id' })
     public country: Country
 
     @ManyToMany((type) => Role, {
-        cascadeInsert: true
+        cascadeInsert: true,
+        cascadeUpdate: true
     })
-    @JoinTable()
+    @JoinTable({ name: 'user_roles',
+        joinColumn: {
+        name: 'user',
+        referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+        name: 'role',
+        referencedColumnName: 'id'
+        }
+    })
     public roles: Role[]
 
     @Column({ type: 'bool', default: false })
@@ -116,10 +129,11 @@ export class User {
     public linkedWithLinkedin: boolean
 
     @BeforeInsert()
-    private hash() {
+    private async hash() {
         this.emailAccessToken = uuid()
         this.salt = bcrypt.genSaltSync(10)
-        this.password = bcrypt.hashSync(password, this.salt)
+        this.password = bcrypt.hashSync(this.password, this.salt)
+        await sendVerificationEmail(this.email, this.emailAccessToken)
     }
 
 }

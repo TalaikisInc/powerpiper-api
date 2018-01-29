@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { getManager } from 'typeorm'
 import { Role } from '../../entity/role'
 
-export async function RoleController(request: Request, response: Response) {
+export async function RoleSeed(request: Request, response: Response) {
 
     const roleRepository = await getManager().getRepository(Role)
 

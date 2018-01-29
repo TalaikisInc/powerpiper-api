@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { getManager } from 'typeorm'
+
 import { Post } from '../../entity/post'
 
 export async function GetPostsByAuthorController(request: Request, response: Response) {
