@@ -1,49 +1,39 @@
-import * as bcrypt from 'bcrypt'
-import * as uuid from 'uuid/v4'
-import { Column,
-    Entity,
-    PrimaryGeneratedColumn,
-    ManyToMany,
-    OneToOne,
-    JoinColumn,
-    Index,
-    JoinTable,
-    CreateDateColumn,
-    UpdateDateColumn,
-    BeforeInsert } from 'typeorm'
+import { Column, Entity, ManyToMany, OneToOne, JoinColumn, Index, JoinTable } from 'typeorm'
 import { IsNotEmpty, IsInt, IsAlpha, IsEmail, IsBoolean, IsDate, IsPositive, Matches } from 'class-validator'
 
-import { Role } from './role'
-import { Country } from './country'
-import _ENV_ from '../config'
-import sendVerificationEmail from '../utils/email'
+import { Base } from './../base'
+import { Role } from './../role'
+import { Country } from './../country'
 
 @Entity()
-export class User {
-    @PrimaryGeneratedColumn()
-    public id: number
-
+export class User extends Base {
     @Index({ unique: true })
     @Column()
     @IsEmail()
     @IsNotEmpty()
     public email: string
 
-    @CreateDateColumn()
-    public createdAt: Date
-
-    @UpdateDateColumn()
-    public updatedAt: Date
+    @Column()
+    @IsNotEmpty()
+    public password: string
 
     @Column()
+    @IsNotEmpty()
+    public emailAccessToken: string
+
+    @Column()
+    @IsNotEmpty()
+    public salt: string
+
+    @Column('varchar', { nullable: true })
     @IsAlpha()
     public firstName: string
 
-    @Column()
+    @Column('varchar', { nullable: true })
     @IsAlpha()
     public lastName: string
 
-    @Column({ type: 'date', nullable: true })
+    @Column('date', { nullable: true })
     @IsDate()
     public birthDate: Date
 
@@ -96,18 +86,6 @@ export class User {
     @Column({ nullable: true })
     public ethAddress: string
 
-    @Column()
-    @IsNotEmpty()
-    public password: string
-
-    @Column()
-    @IsNotEmpty()
-    public emailAccessToken: string
-
-    @Column()
-    @IsNotEmpty()
-    public salt: string
-
     @Column({ type: 'bool', default: false })
     @IsBoolean()
     public emailVerified: boolean
@@ -127,13 +105,4 @@ export class User {
     @Column({ type: 'bool', default: false })
     @IsBoolean()
     public linkedWithLinkedin: boolean
-
-    @BeforeInsert()
-    private async hash() {
-        this.emailAccessToken = uuid()
-        this.salt = bcrypt.genSaltSync(10)
-        this.password = bcrypt.hashSync(this.password, this.salt)
-        await sendVerificationEmail(this.email, this.emailAccessToken)
-    }
-
 }

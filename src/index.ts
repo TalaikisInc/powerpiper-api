@@ -7,6 +7,7 @@ import * as bodyParser from 'body-parser'
 import { createConnection, useContainer } from 'typeorm'
 import { Container } from 'typedi'
 import chalk from 'chalk'
+import { useContainer as routingContainer, useExpressServer } from 'routing-controllers'
 
 import { User } from './entity/user'
 import { Post } from './entity/post'
@@ -15,13 +16,14 @@ import { Role } from './entity/role'
 import { Country } from './entity/country'
 import { Page } from './entity/page'
 import { Request, Response } from 'express'
-// import { routes } from './router'
 import _ENV_ from './config'
-import UserRouter from './router/user'
-import BlogRouter from './router/blog'
 import SeedRouter from './router/seed'
+import { PostController } from './controller/post'
+import { UserController } from './controller/user'
+import { UserErrorHandler } from './controller/user/error'
 
 useContainer(Container)
+routingContainer(Container)
 
 createConnection({
     type: 'postgres',
@@ -60,19 +62,7 @@ createConnection({
       next()
     })
 
-    server.use(lusca({
-      csrf: true,
-      csp: {
-        policy: {
-          'default-csp': 'self'
-        }
-      },
-      xframe: `ALLOW-FROM ${_ENV_.BASE_URL}`,
-      hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
-      xssProtection: true,
-      nosniff: true,
-      referrerPolicy: 'same-origin'
-    }))
+    server.use(lusca())
 
     server.use(bodyParser.json())
 
@@ -80,10 +70,20 @@ createConnection({
 
     const router = express.Router()
 
-    server.use('/', router)
-    server.use('/api/users', UserRouter)
-    server.use('/api/blog', BlogRouter)
     server.use('/api/seed', SeedRouter)
+
+    useExpressServer(server, {
+      controllers: [
+        UserController,
+        PostController
+      ],
+      middlewares: [
+        UserErrorHandler
+      ],
+      routePrefix: '/api/1.0',
+      validation: true,
+      defaultErrorHandler: false
+    })
 
     server.listen(_ENV_.API_PORT)
 

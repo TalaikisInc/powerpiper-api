@@ -1,13 +1,10 @@
-import { Entity, Index, PrimaryGeneratedColumn, Column,
-    CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm'
+import { Entity, Index, Column } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
-import slugify from '../../utils/slugify'
+
+import { Base } from '../base'
 
 @Entity({ orderBy: { createdAt: 'DESC' }})
-export abstract class Content {
-
-    @PrimaryGeneratedColumn()
-    public id: number
+export abstract class Content extends Base {
 
     @Column()
     @IsNotEmpty()
@@ -19,17 +16,7 @@ export abstract class Content {
     public slug: string
 
     @Column({ type: 'text', nullable: false })
+    @IsNotEmpty()
     public content: string
-
-    @CreateDateColumn()
-    public createdAt: Date
-
-    @UpdateDateColumn()
-    public updatedAt: Date
-
-    @BeforeInsert()
-    private slugMaker() {
-        this.slug = slugify(this.title)
-    }
 
 }

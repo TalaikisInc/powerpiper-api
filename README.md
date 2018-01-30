@@ -11,8 +11,9 @@
 - Typescript
 - Express
 - TypeORM
-- Routing controllers
-- Class validator
+- class-validator
+- routing-controllers
+- Passport
 - Etc.
 
 ### Run it

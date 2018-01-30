@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm'
 import { IsNotEmpty } from 'class-validator'
 
-@Entity({ orderBy: { createdAt: 'ASC' }})
+@Entity({ orderBy: { title: 'ASC' }})
 export class Country {
 
     @PrimaryGeneratedColumn()
