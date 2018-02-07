@@ -5,11 +5,11 @@ import { IsNotEmpty } from 'class-validator'
 export class Role {
 
     @PrimaryGeneratedColumn()
-    public id: number
+    public id?: number
 
     @Index({ unique: true })
     @IsNotEmpty()
     @Column()
-    public title: string
+    public title?: string
 
 }

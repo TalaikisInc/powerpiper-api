@@ -6,13 +6,13 @@ import { Base } from '../base'
 export class Category extends Base {
 
     @Column()
-    public title: string
+    public title?: string
 
     @Column()
     @Index({ unique: true })
-    public slug: string
+    public slug?: string
 
     @Column({ unique: true })
-    public image: string
+    public image?: string
 
 }

@@ -11,7 +11,7 @@ export class User extends Base {
     @Column()
     @IsEmail()
     @IsNotEmpty()
-    public email: string
+    public email?: string
 
     @Column()
     @IsNotEmpty()
@@ -19,7 +19,7 @@ export class User extends Base {
 
     @Column()
     @IsNotEmpty()
-    public emailAccessToken: string
+    public emailAccessToken?: string
 
     @Column()
     @IsNotEmpty()
@@ -27,37 +27,37 @@ export class User extends Base {
 
     @Column('varchar', { nullable: true })
     @IsAlpha()
-    public firstName: string
+    public firstName?: string
 
     @Column('varchar', { nullable: true })
     @IsAlpha()
-    public lastName: string
+    public lastName?: string
 
     @Column('date', { nullable: true })
     @IsDate()
-    public birthDate: Date
+    public birthDate?: Date
 
     @Column({ nullable: true })
     @IsAlpha()
-    public street: string
+    public street?: string
 
     @Column({ nullable: true })
     @IsInt()
     @IsPositive()
-    public homeNo: number
+    public homeNo?: number
 
     @Column({ nullable: true })
     @IsInt()
     @IsPositive()
-    public aptNo: number
+    public aptNo?: number
 
     @Column({ nullable: true })
     @IsAlpha()
-    public state: string
+    public state?: string
 
     @OneToOne((type) => Country)
     @JoinColumn({ name: 'country_id' })
-    public country: Country
+    public country?: Country
 
     @ManyToMany((type) => Role, {
         cascadeInsert: true,
@@ -73,36 +73,44 @@ export class User extends Base {
         referencedColumnName: 'id'
         }
     })
-    public roles: Role[]
+    public roles?: Role[]
 
     @Column({ type: 'bool', default: false })
     @IsBoolean()
-    public isAdmin: boolean
+    public isAdmin?: boolean
 
     @Column({ type: 'bool', default: false })
     @IsBoolean()
-    public isStaff: boolean
+    public isStaff?: boolean
 
     @Column({ nullable: true })
-    public ethAddress: string
+    public ethAddress?: string
 
     @Column({ type: 'bool', default: false })
     @IsBoolean()
-    public emailVerified: boolean
+    public emailVerified?: boolean
 
     @Column({ type: 'bool', default: false })
     @IsBoolean()
-    public linkedWithFacebook: boolean
+    public linkedWithFacebook?: boolean
 
     @Column({ type: 'bool', default: false })
     @IsBoolean()
-    public linkedWithTwitter: boolean
+    public linkedWithTwitter?: boolean
 
     @Column({ type: 'bool', default: false })
     @IsBoolean()
-    public linkedWithGoogle: boolean
+    public linkedWithGoogle?: boolean
 
     @Column({ type: 'bool', default: false })
     @IsBoolean()
-    public linkedWithLinkedin: boolean
+    public linkedWithLinkedin?: boolean
+
+    @Column({ type: 'number', default: 0 })
+    public loginTries?: number
+
+    @Column({ type: 'bool', default: false })
+    @IsBoolean()
+    public signedIn?: boolean
+
 }

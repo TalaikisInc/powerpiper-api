@@ -1,4 +1,5 @@
-import { Req, Res, Body, Delete, Get, HttpCode, JsonController, Param, Post, Put } from 'routing-controllers'
+import { Req, Res, Body, Delete, Get, HttpCode, OnUndefined,
+  JsonController, Param, Post, Put, Authorized } from 'routing-controllers'
 import { Inject } from 'typedi'
 import { IPost, PostService, Post as Article } from '../../entity/post'
 
@@ -23,22 +24,28 @@ export class PostController {
   }
 
   @Get('/post/:id')
+  @OnUndefined(404)
   public GetOne(@Param('id') id: string) {
     return this.postService.getOne(id)
   }
 
   @Post()
   @HttpCode(201)
+  @Authorized()
   public Create(@Body({ required: true }) props: IPost): Promise<Article> {
     return this.postService.create(props)
   }
 
   @Put('/update/:id')
+  @Authorized()
+  @OnUndefined(204)
   public Update(@Param('id') id: string, @Body({ required: true }) props: IPost): Promise<void> {
     return this.postService.update(id, props)
   }
 
   @Delete('/delete/:id')
+  @Authorized()
+  @OnUndefined(204)
   public Delete(@Param('id') id: string): Promise<void> {
     return this.postService.delete(id)
   }

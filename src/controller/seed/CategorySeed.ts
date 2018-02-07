@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { getManager } from 'typeorm'
 
 import { Category } from '../../entity/category'
-import slugify from '../../utils/slugify'
+import { slugify } from '../../services'
 
 export async function CategorySeed(request: Request, response: Response) {
 

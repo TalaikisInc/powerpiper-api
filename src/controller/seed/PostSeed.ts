@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { getManager } from 'typeorm'
 
 import { Post } from '../../entity/post'
-import slugify from '../../utils/slugify'
+import { slugify } from '../../services'
 
 export async function PostSeed(request: Request, response: Response) {
 

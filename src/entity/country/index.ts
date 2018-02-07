@@ -5,11 +5,11 @@ import { IsNotEmpty } from 'class-validator'
 export class Country {
 
     @PrimaryGeneratedColumn()
-    public id: number
+    public id?: number
 
     @Index({ unique: true })
     @Column()
     @IsNotEmpty()
-    public title: string
+    public title?: string
 
 }

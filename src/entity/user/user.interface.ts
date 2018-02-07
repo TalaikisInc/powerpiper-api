@@ -25,4 +25,6 @@ export interface IUser extends IBase {
     linkedWithTwitter: boolean
     linkedWithGoogle: boolean
     linkedWithLinkedin: boolean
+    loginTries: number
+    signedIn: boolean
 }

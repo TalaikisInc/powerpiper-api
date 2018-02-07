@@ -8,15 +8,15 @@ export abstract class Content extends Base {
 
     @Column()
     @IsNotEmpty()
-    public title: string
+    public title?: string
 
     @Column()
     @Index({ unique: true })
     @IsNotEmpty()
-    public slug: string
+    public slug?: string
 
     @Column({ type: 'text', nullable: false })
     @IsNotEmpty()
-    public content: string
+    public content?: string
 
 }

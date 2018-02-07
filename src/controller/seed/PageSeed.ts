@@ -3,7 +3,7 @@ import { getManager } from 'typeorm'
 import * as pug from 'pug'
 
 import { Page } from '../../entity/page'
-import slugify from '../../utils/slugify'
+import { slugify } from '../../services'
 
 export async function PageSeed(request: Request, response: Response) {
 

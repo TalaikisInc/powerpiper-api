@@ -1,7 +1,17 @@
 const _ENV_ = {
   SYNC_DB: true,
   LOG_DB: true,
-  SESSION_SECRET: 'test44545',
+  MONITOR: true,
+  MONITOR_USER: 'test',
+  CACHE_DB: false,
+  LOG_LEVEL: 'debug',
+  LOG_JSON: false,
+  MONITOR_PASSWORD: 'test',
+  LOG_OUTPUT: 'dev',
+  LOG_TIMESTAMP: true,
+  LOG_COLORIZE: true,
+  MONITOR_ROUTE: '.monitor',
+  SESSION_SECRET: '47e5394b64d149979f3b32',
   FALLBACK_SALT: 'zazaza',
   BASE_URL: 'http://127.0.0.1:3010',
   DATABASE_HOST: '127.0.0.1',
@@ -16,7 +26,9 @@ const _ENV_ = {
   EMAIL_PORT: 2525,
   EMAIL_USERNAME: 'placeholder',
   EMAIL_PASSWORD: 'placeholder',
-  EMAIL_SECURE: true
+  EMAIL_SECURE: true,
+  ROUTE_PREFIX: '/api/1.0',
+  CRYPT_KEY: 'HjkyhkkuyttyuUKYU' // use utils/crypto.generateKey
 }
 
 export default _ENV_

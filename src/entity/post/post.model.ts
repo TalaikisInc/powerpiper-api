@@ -10,7 +10,7 @@ export class Post extends Content {
 
     @Column({ unique: true })
     @IsNotEmpty()
-    public image: string
+    public image?: string
 
     @ManyToMany((type) => Category, {
         cascadeInsert: true,
@@ -26,7 +26,7 @@ export class Post extends Content {
         referencedColumnName: 'id'
       }
     })
-    public categories: Category[]
+    public categories?: Category[]
 
     @ManyToMany((type) => User, {
         cascadeInsert: true,
@@ -42,6 +42,6 @@ export class Post extends Content {
         referencedColumnName: 'id'
         }
     })
-    public authors: User[]
+    public authors?: User[]
 
 }

@@ -1,6 +1,3 @@
-import { Entity } from 'typeorm'
-import { Content } from '../abstract/content'
-
-@Entity()
-export class Page extends Content {
-}
+export * from './page.interface'
+export * from './page.model'
+export * from './page.service'

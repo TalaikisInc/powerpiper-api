@@ -19,6 +19,8 @@ module.exports = function(grunt) {
             strict: true,
             experimentalDecorators: true,
             emitDecoratorMetadata: true,
+            strictNullChecks: false,
+            strictPropertyInitialization: false,
             strictNullChecks: false
           }
         }
