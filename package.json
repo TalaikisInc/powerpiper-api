@@ -60,7 +60,7 @@
     "routing-controllers-multiparam": "^0.1.0",
     "shx": "^0.2.2",
     "typedi": "^0.6.0",
-    "typeorm": "^0.1.12",
+    "typeorm": "^0.2.15",
     "typeorm-routing-controllers-extensions": "^0.1.0",
     "typeorm-typedi-extensions": "^0.1.1",
     "uuid": "^3.2.1",
